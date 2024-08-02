@@ -1,0 +1,13 @@
+.heroes-list {
+  &__list {
+    outline: 1px solid red;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &__pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
