@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import { IHeroInterface } from "@shared/interface/hero.interface";
-import { Edge, NgxGraphModule } from "@swimlane/ngx-graph";
+import { NgxGraphModule } from "@swimlane/ngx-graph";
 import { StarWarsApiService } from "@shared/services/star-wars-api.service";
 
 @Component({
@@ -15,8 +14,9 @@ import { StarWarsApiService } from "@shared/services/star-wars-api.service";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeroDetailsComponent implements OnInit {
-  // hero = signal<IHeroInterface | null>(null);
-
+  hero: any | null = null;
+  nodes: any = [];
+  links: any = [];
 
   constructor(
     private activeRoute: ActivatedRoute,
@@ -24,11 +24,17 @@ export class HeroDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let { hero } = this.activeRoute.snapshot.data;
+    let {hero} = this.activeRoute.snapshot.data;
 
-    // this.hero = signal<IHeroInterface>(hero);
-
-    this.starWarsApi.getHeroDetails(1).subscribe()
+    this.loadHeroDetails(hero);
   }
+
+  loadHeroDetails(hero: any): void {
+    this.starWarsApi.getHeroDetails(10).subscribe((data)=> {
+      console.log(data)
+    })
+
+  }
+
 
 }
