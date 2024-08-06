@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { IHeroInterface } from "@shared/interface/hero.interface";
 import { RouterLink } from "@angular/router";
+import { NgOptimizedImage } from "@angular/common";
 
 @Component({
   selector: 'app-hero-card',
   standalone: true,
   imports: [
-    RouterLink
+    RouterLink,
+    NgOptimizedImage
   ],
   templateUrl: './hero-card.component.html',
   styleUrl: './hero-card.component.scss',

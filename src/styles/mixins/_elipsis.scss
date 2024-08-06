@@ -1,0 +1,21 @@
+/// Crop text and display an ellipsis with multiline.
+/// @param {number} $number-of-lines - The number of lines.
+/// @return {mixin} - The text ellipsis mixin.
+@mixin text-ellipsis(
+    $number-of-lines: 1
+) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    @if $number-of-lines == 1 {
+        white-space: nowrap;
+    } @else {
+        white-space: inherit;
+
+        @supports (-webkit-line-clamp: $number-of-lines) {
+            -webkit-box-orient: vertical;
+            display: -webkit-box;
+            -webkit-line-clamp: $number-of-lines;
+        }
+    }
+}

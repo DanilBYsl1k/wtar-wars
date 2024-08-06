@@ -1,5 +1,6 @@
 import { IFilmsInterface } from "@shared/interface/films.interface";
 import { IStarship } from "@shared/interface/starships.interface";
+import { ShipsFilmsType } from "@shared/types/ships-films.type";
 
 export interface IBaseHeroInterface {
   birth_year: string
@@ -28,11 +29,11 @@ export interface IResponseHero {
   next: string;
   previous: string;
   results: IHeroInterface[];
+  page: number
 }
 
 export interface FullInfoHero extends IBaseHeroInterface {
   starships: IStarship[];
   films: IFilmsInterface[];
+  filmsShips: ShipsFilmsType
 }
-
-
