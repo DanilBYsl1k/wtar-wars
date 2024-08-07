@@ -19,7 +19,6 @@ import { MatButton } from "@angular/material/button";
     MatPaginator,
     PreloaderComponent,
     HeroCardComponent,
-    MatButton
   ],
   templateUrl: './heroes-list.component.html',
   styleUrl: './heroes-list.component.scss',

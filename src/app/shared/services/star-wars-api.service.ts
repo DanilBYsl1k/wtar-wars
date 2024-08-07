@@ -47,7 +47,7 @@ export class StarWarsApiService {
     return this.http.get<IStarship>(`starships/${id}`)
   }
 
-  private getFilmDetails(id: number): Observable<IFilmsInterface> {
+  getFilmDetails(id: number): Observable<IFilmsInterface> {
     return this.http.get<IFilmsInterface>(`films/${id}`)
   }
 
@@ -60,11 +60,15 @@ export class StarWarsApiService {
         }).pipe(
           map(({ films, ships }) => this.enrichHeroWithFilmsAndShips(hero, films, ships))
         ),
-      )
+      ),
+      catchError((error)=> {
+        this.router.navigate(['/']);
+        return of(error);
+      })
     );
   }
 
-  private getFilmsWithDetails(filmIds: number[]): Observable<IFilmsInterface[]> {
+   getFilmsWithDetails(filmIds: number[]): Observable<IFilmsInterface[]> {
     return from(filmIds).pipe(
       concatMap(id =>
         this.getFilmDetails(id).pipe(
@@ -74,7 +78,7 @@ export class StarWarsApiService {
     );
   }
 
-  private getStarshipWithDetails(starshipIds: number[]): Observable<IStarship[]> {
+  getStarshipWithDetails(starshipIds: number[]): Observable<IStarship[]> {
     return from(starshipIds).pipe(
       concatMap(id =>
         this.getStarshipDetails(id).pipe(

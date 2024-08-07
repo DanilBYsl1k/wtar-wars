@@ -30,14 +30,10 @@ export class BaseHttpService {
   }
 
   put<T>(methods: string, params: object = {}): Observable<T> {
-    return this.httpClient.put<T>(`${this.domainAPI}/${methods}`, {
-      body: params
-    });
+    return this.httpClient.put<T>(`${this.domainAPI}/${methods}`, params);
   }
 
   patch<T>(methods: string, params: object = {}): Observable<T> {
-    return this.httpClient.patch<T>(`${this.domainAPI}/${methods}`, {
-      body: params,
-    });
+    return this.httpClient.patch<T>(`${this.domainAPI}/${methods}`, params);
   }
 }

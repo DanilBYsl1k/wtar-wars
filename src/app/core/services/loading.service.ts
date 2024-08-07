@@ -1,26 +1,27 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject, interval, Observable, takeUntil } from "rxjs";
+import { BehaviorSubject, Subject, interval, Observable, takeUntil, take } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoadingService {
   private loadingSubject = new BehaviorSubject<boolean>(false);
-  loading$: Observable<boolean> = this.loadingSubject.asObservable()
   private stopLoading$ = new Subject<boolean>();
+  loading$: Observable<boolean> = this.loadingSubject.asObservable();
 
   constructor() { }
 
   show() {
     this.loadingSubject.next(true);
-    this.stopLoading$.next(false)
+    this.stopLoading$.next(false);
   }
 
   hide() {
-    interval(1000).pipe(
+    interval(500).pipe(
+      take(1),
       takeUntil(this.stopLoading$)
-    ).subscribe(()=> {
+    ).subscribe(() => {
       this.loadingSubject.next(false);
-    })
+    });
   }
 }
