@@ -1,4 +1,4 @@
-@import "../variables/breakpoints";
+@import "variables/breakpoints";
 
 @mixin breakpoint($breakpointValue) {
     @each $breakpoint, $value in $breakpoints {
