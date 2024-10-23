@@ -13,7 +13,7 @@ export class BaseHttpService {
   constructor(private httpClient: HttpClient) {}
 
   get<T>(methods: string, params: object = {}, header ={} ): Observable<T> {
-    return this.httpClient.get<T>(`${this.domainAPI}/${methods}`, {
+    return this.httpClient.get<T>(`${this.domainAPI}${methods}`, {
       headers: header as HttpHeaders,
       params: params as HttpParams,
     });

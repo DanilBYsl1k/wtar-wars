@@ -1,5 +1,5 @@
 export const environment = {
-  production: true,
+  production: false,
   domain: 'https://sw-api.starnavi.io/'
 
 }
