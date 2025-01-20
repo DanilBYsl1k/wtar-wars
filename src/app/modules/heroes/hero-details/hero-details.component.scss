@@ -1,0 +1,41 @@
+@import "mixins/breakpionts";
+
+.hero-details {
+  display: grid;
+  grid-template-columns: 1fr 0.5fr;
+  gap: 10px;
+
+  @include breakpoint(medium) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @include breakpoint(medium) {
+    display: flex;
+
+    flex-direction: column-reverse;
+  }
+
+  &__graph-details {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  &__details-wrapper {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  &__details {
+    padding: 10px;
+  }
+
+  .hero-details__details-img-wrapper {
+    @include breakpoint(medium) {
+      img {
+        width: 100%;
+      }
+    }
+  }
+}

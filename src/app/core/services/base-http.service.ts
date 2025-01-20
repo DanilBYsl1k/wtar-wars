@@ -13,7 +13,7 @@ export class BaseHttpService {
   constructor(private httpClient: HttpClient) {}
 
   get<T>(methods: string, params: object = {}, header ={} ): Observable<T> {
-    return this.httpClient.get<T>(`${this.domainAPI}/${methods}`, {
+    return this.httpClient.get<T>(`${this.domainAPI}${methods}`, {
       headers: header as HttpHeaders,
       params: params as HttpParams,
     });
@@ -30,14 +30,10 @@ export class BaseHttpService {
   }
 
   put<T>(methods: string, params: object = {}): Observable<T> {
-    return this.httpClient.put<T>(`${this.domainAPI}/${methods}`, {
-      body: params
-    });
+    return this.httpClient.put<T>(`${this.domainAPI}/${methods}`, params);
   }
 
   patch<T>(methods: string, params: object = {}): Observable<T> {
-    return this.httpClient.patch<T>(`${this.domainAPI}/${methods}`, {
-      body: params,
-    });
+    return this.httpClient.patch<T>(`${this.domainAPI}/${methods}`, params);
   }
 }

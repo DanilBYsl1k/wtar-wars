@@ -1,21 +1,19 @@
 <div class="heroes-list">
+
   @if ($heroes | async; as heroes) {
+    <div class="heroes-list__pagination">
+      @if (heroes.previous) {
+        <button class="button" (click)="prevHeroes()">Prev</button>
+      }
+      <span class="page">{{ heroes.page }}</span>
+      @if (heroes.next) {
+        <button class="button" (click)="nextHeroes()"> Next</button>
+      }
+    </div>
     <ul class="heroes-list__list">
       @for (hero of heroes.results; track hero.id) {
         <app-hero-card [hero]="hero"></app-hero-card>
       }
     </ul>
-
-    <div class="heroes-list__pagination">
-      @if (heroes.previous) {
-        <button mat-button class="primary" (click)="prevHeroes()">Prev</button>
-      }
-      {{ this.page() }}
-      @if (heroes.next) {
-        <button mat-button class="primary" (click)="nextHeroes()"> Next</button>
-      }
-    </div>
-  } @else {
-    <app-preloader></app-preloader>
   }
 </div>

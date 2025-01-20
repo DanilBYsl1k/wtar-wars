@@ -1,55 +1,115 @@
 import { Injectable } from '@angular/core';
-import { forkJoin, map,  mergeMap, Observable } from "rxjs";
+import {
+  catchError,
+  concatMap,
+  delay,
+  forkJoin,
+  from,
+  map,
+  mergeMap,
+  Observable,
+  of,
+  toArray
+} from "rxjs";
 
 import { BaseHttpService } from "@core/services/base-http.service";
-import { IHeroInterface, IResponseHero } from "@shared/interface/hero.interface";
+import { FullInfoHero, IHeroInterface, IResponseHero } from "@shared/interface/hero.interface";
+import { IStarship } from "@shared/interface/starships.interface";
+import { IFilmsInterface } from "@shared/interface/films.interface";
+import { ShipsFilmsType } from "@shared/types/ships-films.type";
+import { Router } from "@angular/router";
+
+type shipAndFilmMap = Map<number, number[]>;
 
 @Injectable({
   providedIn: 'root'
 })
 export class StarWarsApiService {
 
-  constructor(private http: BaseHttpService) {
-  }
+  constructor(private http: BaseHttpService, private router: Router) {}
 
   getHeroes(page = 1): Observable<IResponseHero> {
-    return this.http.get<IResponseHero>(`people/?page=${ page }`).pipe(
-    );
-  }
-
-  getHeroDetails(id: number): Observable<any> {
-    return this.http.get<IHeroInterface>(`people/${ id }`).pipe(
-      mergeMap((hero) => {
-        let filmsDetails = hero.films.map((num) => this.getFilmDetails(num))
-        return forkJoin([ ...filmsDetails ]).pipe(
-          map((films) => {
-            return {...hero, films}
-          }),
-          map((a: any) => {
-            a.films.forEach((num: any) => {
-              let w = num.starships.find((z: any) => {
-                console.log(z)
-              });
-
-              console.log(
-                hero.starships.find((a)=> {
-
-                })
-              )
-            })
-            return a;
-          })
-        )
+    return this.http.get<IResponseHero>(`people/?page=${page}`).pipe(
+      map((value)=> {
+        return {...value, page }
+      }),
+      catchError((error)=> {
+        if (error.status === 404){
+          this.router.navigate([''], { queryParams: { page: 1} });
+          return  this.getHeroes();
+        }
+        return  of(error)
       })
     );
   }
 
-  getFilmDetails(id: number): Observable<any> {
-    return this.http.get(`films/${ id }`);
+  getStarshipDetails(id: number): Observable<IStarship> {
+    return this.http.get<IStarship>(`starships/${id}`)
   }
 
-  getStarshipDetails(id: number): Observable<any> {
-    return this.http.get(`starships/${ id }`);
+  getFilmDetails(id: number): Observable<IFilmsInterface> {
+    return this.http.get<IFilmsInterface>(`films/${id}`)
   }
 
+  getHeroDetails(id: number): Observable<FullInfoHero> {
+    return this.http.get<IHeroInterface>(`people/${id}`).pipe(
+      mergeMap(hero =>
+        forkJoin({
+          films: this.getFilmsWithDetails(hero.films),
+          ships: this.getStarshipWithDetails(hero.starships)
+        }).pipe(
+          map(({ films, ships }) => this.enrichHeroWithFilmsAndShips(hero, films, ships))
+        ),
+      ),
+      catchError((error)=> {
+        this.router.navigate(['/']);
+        return of(error);
+      })
+    );
+  }
+
+   getFilmsWithDetails(filmIds: number[]): Observable<IFilmsInterface[]> {
+    return from(filmIds).pipe(
+      concatMap(id =>
+        this.getFilmDetails(id).pipe(
+          delay(200)
+        )),
+      toArray()
+    );
+  }
+
+  getStarshipWithDetails(starshipIds: number[]): Observable<IStarship[]> {
+    return from(starshipIds).pipe(
+      concatMap(id =>
+        this.getStarshipDetails(id).pipe(
+          delay(200)
+        )),
+      toArray()
+    );
+  }
+
+  private createFilmsShipMap(films: IFilmsInterface[]): shipAndFilmMap {
+    return films.reduce((map, film) => {
+      film.starships.forEach(ship => {
+        if (!map.has(ship)) {
+          map.set(ship, []);
+        }
+        map.get(ship)!.push(film.id);
+      });
+      return map;
+    }, new Map<number, number[]>());
+  }
+
+  private enrichHeroWithFilmsAndShips(
+    hero: IHeroInterface,
+    films: IFilmsInterface[],
+    ships: IStarship[]): FullInfoHero {
+    const filmsShipMap: shipAndFilmMap = this.createFilmsShipMap(films);
+    const filmShips: ShipsFilmsType = hero.starships.map(shipId => ({
+      shipId,
+      films: filmsShipMap.get(shipId) || []
+    }));
+
+    return { ...hero, films, filmsShips: filmShips, starships: ships };
+  }
 }

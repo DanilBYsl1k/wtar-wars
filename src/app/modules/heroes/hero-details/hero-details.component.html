@@ -1,16 +1,24 @@
-<!--@if (hero()) {-->
-<!--  <div>-->
-<!--    {{ hero()?.name }}-->
-<!--  </div>-->
-<!--  <ngx-graph [links]="graphData.links" [nodes]="graphData.nodes"></ngx-graph>-->
-<!--} @else {-->
-<!--}-->
-<div>
-<!--  <ngx-graph-->
-<!--    [links]="links"-->
-<!--    [nodes]="nodes"-->
-<!--    [layout]="'dagre'"-->
-<!--  >-->
-<!--  </ngx-graph>-->
+
+<div class="hero-details">
+  <div class="hero-details__graph-details">
+    <app-graph-visualization
+     [edges]="edges"
+     [nodes]="nodes"
+    ></app-graph-visualization>
+  </div>
+  <div class="hero-details__details-wrapper">
+    <div class="hero-details__details-img-wrapper">
+      <img [src]="imgHero()" alt="">
+    </div>
+
+    @if(hero(); as hero) {
+      <div class="hero-details__details">
+        <h2>
+          Name: {{ hero.name }}
+        </h2>
+      </div>
+    }
+  </div>
+
 </div>
 

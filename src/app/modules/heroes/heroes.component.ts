@@ -11,6 +11,4 @@ import { RouterOutlet } from "@angular/router";
   styleUrl: './heroes.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeroesComponent {
-
-}
+export class HeroesComponent {}

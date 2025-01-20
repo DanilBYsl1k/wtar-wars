@@ -1,0 +1,22 @@
+.hero-card {
+  width: 100%;
+  background: white;
+  overflow: hidden;
+  border-radius: 10px;
+  height: 100%;
+
+  &:hover {
+
+  }
+
+  &__details {
+    padding: 10px;
+  }
+
+  &__avatar-wrapper {
+    width: 100%;
+    img {
+      width: 100%;
+    }
+  }
+}

@@ -1,5 +1,13 @@
 <li class="hero-card">
-  <h2>{{ hero().name }}</h2>
+  <a [routerLink]="['/hero/' ,hero().id]">
 
-  <a [routerLink]="[hero().id]">Check more</a>
+  <div class="hero-card__avatar-wrapper">
+    <img [src]="imgHero()" alt="hero-img">
+  </div>
+  <div class="hero-card__details">
+    <h2>
+      {{ hero().name }}
+    </h2>
+  </div>
+  </a>
 </li>
